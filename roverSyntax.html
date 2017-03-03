@@ -1,0 +1,162 @@
+<!-- Andrew Lodge --->
+<!-- CS 290 --->
+<!-- How-To Guide --->
+<!-- 2-17-2017 --->
+
+<!DOCTYPE html>
+ <html>
+	<head>
+		<title>Andrew Lodge Mars Rover Api How-To</title>
+		<meta charset="UTF-8">
+		
+		<link href="style.css" rel="stylesheet">
+		
+		<script src="roverSyntax.js"></script>
+	</head>
+	<body>
+		<h1>Mars Rover API "How-To" Guide</h1>
+		<h2>Basic Syntax to interact with the API</h2>
+		<p>
+			
+		</p>
+		
+		
+		<p>
+		The basic query to find a Mars Rover picture is quite similar to the APOD query 
+		described <a href="basicSyntax.html">here</a>. </br></br>
+		
+		The difference is that the Mars Rover database can be searched by
+		multiple attributes:
+		<ul>
+		<li>Time: either earth date or sol (Martian day after landing, sol=0)></li>
+		<li>Rover: there are three different rovers: Curiosity, Opportunity, and Spirit</li>
+		<li>Camera: each rover has several cameras</li>
+		<li>Page: number of pages of photos to return (25 per page)</li>
+		<li>api_key: either DEMO_KEY for the demo key or an individial's developer key</li>
+		</ul>
+		</p>
+		
+		<p>
+		To conduct an example search, consider the following table:  
+		</p>
+
+		<form class="example">
+			<fieldset>
+				<legend>GET request for Mars Rover by multiple parameters</legend>
+				<table>
+					<tbody>
+						<tr>
+							<td>Time type</td>
+							<td>
+								<select name="timeType" id="timeType">
+								<option value=" "> </option>
+								<option value="earth_date">Earth Date</option>
+								<option value="sol">Martian Sol</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Time</td>
+							<td><input type="text" name="time" id="time" size=12" maxlength="15"></td>
+						</tr>
+						<tr>
+							<td>Rover</td>
+							<td>
+								<select name="rover" id="rover">
+								<option value=" "> </option>
+								<option value="curiosity">Curiosity</option>
+								<option value="opportunity">Opportunity</option>
+								<option value="spirit">Spirit</option>								
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Camera</td>
+							<td>
+								<select name="camera" id="camera">
+								<option value=" ">  </option>
+								<option value="fhaz">FHAZ - Front Hazard Avoidance Camera</option>
+								<option value="rhaz">RHAZ - Rear Hazard Avoidance Camera</option>
+								<option value="mast">Mast Camera</option>
+								<option value="chemcam">Chemistry and Camera Complex</option>
+								<option value="mahli">Mars Hand Lens Imager</option>
+								<option value="mardi">Mars Descent Imager</option>
+								<option value="navcam">Navigation Camera</option>
+								<option value="pancam">Panoramic Camera</option>
+								<option value="minites">Miniature Thermal Emission Spectrometer (Mini-TES)</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Pages</td>
+							<td><input type="text" name="page" id="page" size="3" maxlength="3"></td>
+						</tr>
+						<tr>	
+							<td>api_key</td>
+							<td><input type="text" name="api_key" id="api_key" size="40" maxlength="50"></td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" value="Submit Search" id="submitRover">
+			</fieldset>
+		</form>
+		
+		<p>
+		The query for this one is a little more tedious because we have to pass more 
+		variables and assemble a more involved string, but there is nothing very complicated going on.
+		</p>
+		
+		<pre class="code">
+function reqButton()
+{
+	document.getElementById("submitRover").addEventListener('click', function(event)
+	{
+		var req = new XMLHttpRequest();
+		var payload = {timeType, time, rover, camera, page, api_key:null};
+		payload.timeType = document.getElementById("timeType").value;
+		payload.time = document.getElementById("time").value;
+		payload.rover = document.getElementById("rover").value;
+		payload.camera = document.getElementById("camera").value;
+		payload.page = document.getElementById("page").value;
+		payload.api_key = document.getElementById("api_key").value;
+		req.open("GET", "https://api.nasa.gov/mars-photos/api/v1/rovers/"
+			+ payload.rover + "/photos?" 
+			+ payload.timeType + "=" 
+			+ payload.time + "&camera="
+			+ payload.camera + "&page="
+			+ payload.page + "&api_key="
+			+ payload.api_key, true);
+		req.addEventListener('load',function(){
+			if(req.status >= 200 && req.status < 400)
+			{
+				var response = JSON.parse(req.responseText);
+			} 
+			else 
+			{
+				console.log("Error in network request: " + req.statusText);
+			}});		
+		req.send(JSON.stringify(payload));
+		event.preventDefault();
+	})
+}
+		</pre>
+		
+		<p>
+		Some complication does arise, however, in <a href="roverHandling.html">handling the response</a>, 
+		since it comes back as an object with 1 name:value pair.  The name is "photos" and the value is an array of objects.</br></br>
+		
+		The objects in this array are themselves interesting.  They have 6 elements:
+		</p>
+		<ul>
+		<li>Camera: An object with the properties of the camera used</li>
+		<li>earth_date: The date on Earth the picture was taken</li>
+		<li>id</li>
+		<li>img_source: the url where the photo is kept</li>
+		<li>Rover: an object with properties of the rover</li>
+		<li>sol: The number of Martian days after landing</li>
+		</ul>
+		
+		<img src="roverObject.jpg" class="example">
+		
+	</body>
+ </html>

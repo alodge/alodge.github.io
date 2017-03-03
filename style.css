@@ -1,0 +1,70 @@
+/*
+Andrew Lodge
+CS 290
+How-To Guide
+2/20/2017
+*/
+
+.code{
+	background-color: hsla(240, 70%, 50%, 0.25);
+	border: 2px solid black;
+	border-radius: 0px;
+	padding: 10px, 5px, 5px, 5px;
+	border: 5px, 5px, 5px, 5px;
+	width: 75%;
+	position: relative;
+	left: 75px;
+}
+
+.response{
+	background-color: hsla(180, 70%, 50%, 0.25);
+	border: 2px solid black;
+	border-radius: 0px;
+	padding: 5px, 5px, 5px, 5px;
+	border: 5px, 5px, 5px, 5px;
+	width: 75%;
+	position: relative;
+	left: 75px;
+}
+
+.explanatory {
+	position: relative;
+	left: 100px;
+	width: 75%;
+}
+
+form {
+	position: relative;
+	left: 75px;
+	width: 75%;
+	
+}
+
+td {
+	border:solid;
+	border-width: 1px;
+	border-color: grey;
+	font-size: 14px;
+}
+
+thead {
+	font-weight: bold;
+}
+
+.samplePicContainer {
+	
+}
+
+.samplePic {
+	width: 25%;
+}
+
+.example {
+	width: 85%;
+	position: relative;
+	left: 75px;
+}
+
+pre {
+	white-space: pre-wrap;
+}

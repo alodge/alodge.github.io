@@ -1,0 +1,110 @@
+<!-- Andrew Lodge --->
+<!-- CS 290 --->
+<!-- How-To Guide --->
+<!-- 2-17-2017 --->
+
+<!DOCTYPE html>
+ <html>
+	<head>
+		<title>Andrew Lodge Mars Rover Api How-To</title>
+		<meta charset="UTF-8">
+		
+		<link href="style.css" rel="stylesheet">
+		
+		<script src="roverHandlingScript.js"></script>
+	</head>
+	<body>
+		<h1>Mars Rover API "How-To" Guide</h1>
+		<h2>Handling the Mars Rover Response</h2>
+		<p>
+		</p>
+				
+		<p>
+		Again, using the same form to demonstrate cutting the query up into pieces, try the sample below.   
+		</p>
+
+		<form class="example">
+			<fieldset>
+				<legend>GET request for Mars Rover by multiple parameters</legend>
+				<table>
+					<tbody>
+						<tr>
+							<td>Time type</td>
+							<td>
+								<select name="timeType" id="timeType">
+								<option value=" "> </option>
+								<option value="earth_date">Earth Date</option>
+								<option value="sol">Martian Sol</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Time</td>
+							<td><input type="text" name="time" id="time" size=12" maxlength="15"></td>
+						</tr>
+						<tr>
+							<td>Rover</td>
+							<td>
+								<select name="rover" id="rover">
+								<option value=" "> </option>
+								<option value="curiosity">Curiosity</option>
+								<option value="opportunity">Opportunity</option>
+								<option value="spirit">Spirit</option>								
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Camera</td>
+							<td>
+								<select name="camera" id="camera">
+								<option value=" ">  </option>
+								<option value="fhaz">FHAZ - Front Hazard Avoidance Camera</option>
+								<option value="rhaz">RHAZ - Rear Hazard Avoidance Camera</option>
+								<option value="mast">Mast Camera</option>
+								<option value="chemcam">Chemistry and Camera Complex</option>
+								<option value="mahli">Mars Hand Lens Imager</option>
+								<option value="mardi">Mars Descent Imager</option>
+								<option value="navcam">Navigation Camera</option>
+								<option value="pancam">Panoramic Camera</option>
+								<option value="minites">Miniature Thermal Emission Spectrometer (Mini-TES)</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Pages</td>
+							<td><input type="text" name="page" id="page" size="3" maxlength="3"></td>
+						</tr>
+						<tr>	
+							<td>api_key</td>
+							<td><input type="text" name="api_key" id="api_key" size="40" maxlength="50"></td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" value="Submit Search" id="submitRover">
+			</fieldset>
+		</form>
+		
+		<p>
+		Now, in the response, we have a little more work to do to get at the actual picture.  Although we could use fewer lines of code, I'll leave them separate so it's clear what we're doing with the objects, arrays, and sub-objects.
+		</p>
+		
+		<pre class="code">
+function reqButton()
+{
+	...
+	req.addEventListener('load',function(){
+			if(req.status >= 200 && req.status < 400)
+			{
+				var response = JSON.parse(req.responseText);
+				var returnArray = response.photos;
+				var returnItem = returnArray[2];
+				var returnPic = returnItem.img_src;
+				document.getElementById('hdPic').src = returnPic;
+			} 
+	...
+}
+		</pre>
+<img id="roverPic">
+		
+	</body>
+ </html>

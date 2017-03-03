@@ -1,0 +1,132 @@
+<!-- Andrew Lodge --->
+<!-- CS 290 --->
+<!-- How-To Guide --->
+<!-- 2-17-2017 --->
+
+<!DOCTYPE html>
+ <html>
+	<head>
+		<title>Andrew Lodge NASA Api How-To</title>
+		<meta charset="UTF-8">
+		
+		<link href="style.css" rel="stylesheet">
+		
+		<script src="basicSyntaxScript.js"></script>
+	</head>
+	<body>
+		<h1>NASA APOD API "How-To" Guide</h1>
+		<h2>Basic Syntax to interact with the API</h2>
+		<p>
+			
+		</p>
+		
+		
+		<p>
+		The basic query to find an APOD picture and description is a GET request that contains date, an hd boolean, and an api_key.
+		This query is pretty straightforward:	
+		</p>
+		
+		<div class="code">
+		<pre>
+https://api.nasa.gov/planetary/apod?date=2017-02-01&hd=true&api_key=DEMO_key
+		</pre>
+		</div>
+		
+		<p>
+		The problem is that it's also not incredibly useful.  Entering the above query into the address bar simply returns a bunch of text:  
+		</p>
+		
+		<pre class="response">
+{
+"date": "2017-02-01",
+"explanation": "Does life exist outside our Solar System? To help find out, NASA has created the Nexus for Exoplanet System Science (NExSS) to better locate and study distant star systems that hold hope of harboring living inhabitants. A new observational result from a NExSS collaboration is the featured time-lapse video of recently discovered planets orbiting the star HR 8799.  The images for the video were taken over seven years from the Keck Observatory in Hawaii.  Four exoplanets appear as white dots partially circling their parent star, purposefully occluded in the center.  The central star HR 8799 is slightly larger and more massive than our Sun, while each of the planets is thought to be a few times the mass of Jupiter.  The HR 8799 system lies about 130 light years away toward the constellation of the Flying Horse (Pegasus). Research will now continue on whether any known or potential planets -- or even moons of these planets -- in the HR 8799 star system could harbor life.   Open Science: Browse 1,400+ codes in the Astrophysics Source Code Library",
+"media_type": "video",
+"service_version": "v1",
+"title": "Four Planets Orbiting Star HR 8799",
+"url": "https://www.youtube.com/embed/Zg9Y4g4e1mU?autoplay=1&loop=1&playlist=Zg9Y4g4e1mU"
+}
+		</pre>
+		
+		<p>
+		Instead, we will want to parse this response into something we can work with.  The following form is taken from the <a href="https://api.nasa.gov/api">APOD api documentation</a>.  The last column takes data and feeds it into the Javascript code shown below.  
+		</p>
+
+		<form>
+			<fieldset>
+				<legend>GET request for APOD by date</legend>
+				<table>
+					<thead>
+						<td>Parameter</td>
+						<td>Syntax</td>
+						<td>Default</td>
+						<td>Desciption</td>
+						<td>Example</td>
+					</thead>
+					<tbody>
+						<tr>
+							<td><label for="date">Date:</label></td>
+							<td>yyyy-mm-dd</td>
+							<td>today</td>
+							<td>date to search for</td>
+							<td><input type="text" name="date" id="date" size="15" maxlength="100"></td>
+						</tr>
+						<tr>
+							<td><label for="hd">HD? (type true or false):</label></td>
+							<td>bool</td>
+							<td>False</td>
+							<td>Retrieves the url for high resolution image</td>
+							<td><input type="text" name="hd" id="hd" size="15" maxlength="100"></td>
+						</tr>
+						<tr>
+							<td><label for="hd">API_KEY: </label></td>
+							<td>string</td>
+							<td>DEMO_KEY</td>
+							<td>key from api.nasa.gov</td>
+							<td><input type="text" name="apikey" id="apikey" size="15" maxlength="100"></td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" value="Submit Date" id="submitDate">
+			</fieldset>
+		</form>
+		
+		<p>
+		Next, we can pull these variables out and send a request with a JavaScript function such as the following.
+		</p>
+		
+		<pre class="code">
+function reqButton()
+{
+	document.getElementById("submitDate").addEventListener('click', function(event)
+	{
+		var req = new XMLHttpRequest();
+		var payload = {date, hd, apikey:null};
+		payload.date = document.getElementById("date").value;
+		payload.hd = document.getElementById("hd").value;
+		payload.apikey = document.getElementById("apikey").value;
+		req.open("GET", "https://api.nasa.gov/planetary/apod?date=" + payload.date 
+			+ "&hd=" + payload.hd
+			+ "&api_key=" + payload.apikey, true);
+
+		req.addEventListener('load',function(){
+			if(req.status >= 200 && req.status < 400)
+			{
+				var response = JSON.parse(req.responseText);
+			} 
+			else 
+			{
+				console.log("Error in network request: " + req.statusText);
+			}});		
+		req.send(JSON.stringify(payload));
+		event.preventDefault();
+	})
+}
+		</pre>
+		
+		<p>
+		Now, in the successful query, the variable "response" is an object, and we can <a href="objectHandling.html">do something</a> with each of the elements:
+		</p>
+		<img id="hdPic">
+		<!-- img src="http://apod.nasa.gov/apod/image/1702/QuadQuasarLens_Hubble_2020.jpg" -->
+	</body>
+ </html>

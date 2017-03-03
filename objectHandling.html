@@ -1,0 +1,59 @@
+<!-- Andrew Lodge --->
+<!-- CS 290 --->
+<!-- Ajax Interactions Assignment --->
+<!-- 2-17-2017 --->
+
+<!DOCTYPE html>
+ <html>
+	<head>
+		<title>Andrew Lodge NASA Api How-To</title>
+		<meta charset="UTF-8">
+		<script src="handlingScript.js"></script>
+		<link href="style.css" rel="stylesheet">
+		
+	</head>
+	<body>
+		<h1>NASA APOD API "How-To" Guide</h1>
+		<h2>Handling the response object</h2>
+		<p>The response to this query will return an object with 7 "name":"value" pairs.  The names of each of these elements are:</p>
+		<ul>
+		<li>date</li>
+		<li>explanation</li>
+		<li>hdurl</li>
+		<li>media_type</li>
+		<li>service_version</li>
+		<li>title</li>
+		<li>url</li>
+		</ul>
+		
+		<p>So, for example, we could slightly modify our .js file and name an html element like this:</p>
+		<div class="code"><pre>
+var response = JSON.parse(req.responseText);
+document.getElementById('hdPic').src = response.hdurl;	
+		</pre></div>
+		<p>
+			Then, we can add a line to our html file using that newly named "hdurl" element like this:
+		</p>
+		<div class="code">
+<xmp><img id="hdPic"></xmp>
+		</div>	
+
+		<p>To illustrate, enter a date in the brief for below</p>
+		<form>
+			<fieldset>
+				<legend>Sample Object Handling</legend>
+				<label>Enter a date (yyyy-mm-dd)</label>
+				<input id="sampleDate" name="sampleDate" type="text"/>
+				<!-- input type="submit" id="tryIt" value="Try It" -->
+				<input type="submit"  id="try" value="try">
+			</fieldset>
+		</form>
+		
+<div class="samplePicContainer">
+</br>
+<span>Now, instead of returning the whole image, we get one we can resize, reposition, or play with in some other fashion</span>
+<img id="hdPic" class="samplePic">
+</div>
+		
+	</body>
+ </html>
